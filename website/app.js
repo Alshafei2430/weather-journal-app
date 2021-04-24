@@ -1,16 +1,19 @@
 /* Global Variables */
+
 const baseURL = "http://api.openweathermap.org/data/2.5/weather?zip=";
-const apiKey = "&appid=9f95a83661de976d8ba0a3a3ce3124f3";
+const apiKey = "&appid=9f95a83661de976d8ba0a3a3ce3124f3&units=metric";
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
+let correctMonth = d.getMonth() + 1;
+let newDate = correctMonth+'.'+ d.getDate()+'.'+ d.getFullYear();
 
 const button = document.querySelector("#generate");
 
 button.addEventListener("click", (e) => {
     const zipCode = document.querySelector("#zip").value;
     getWeatherData(baseURL, zipCode, apiKey)
+
 });
 
 const getWeatherData = async (baseURL, zipCode, apiKey) => {
@@ -26,7 +29,7 @@ const getWeatherData = async (baseURL, zipCode, apiKey) => {
         }
         postData("/addWeatherData", dataObject)
     })
-    .then(
+    .then( () =>
         updateUI()
     )
 }
@@ -56,7 +59,7 @@ const updateUI = async () => {
     const allData = await res.json();
     try{
       document.querySelector('#date').innerHTML = `Date: ${allData.date}`;
-      document.querySelector('#temp').innerHTML = `Temperature: ${allData.temperature}°F`;
+      document.querySelector('#temp').innerHTML = `Temperature: ${allData.temperature}°C`;
       document.querySelector('#content').innerHTML = `You are feeling ${allData.userResponse}`;
   
     }catch(error){
